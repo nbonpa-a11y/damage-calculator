@@ -26,7 +26,7 @@ function renderResult(result) {
       <section>
         <h3>通常ダメージ</h3>
         <ul>
-          <li>平均ダメージ: ${result.normal.avg.toFixed(4)}</li>
+          <li>平均ダメージ: ${result.normal.avg.toFixed(2)}</li>
           <li>下限ダメージ: ${result.normal.min}</li>
           <li>上限ダメージ: ${result.normal.max}</li>
         </ul>
@@ -34,7 +34,7 @@ function renderResult(result) {
       <section>
         <h3>クリティカル</h3>
         <ul>
-          <li>平均ダメージ: ${result.critical.avg.toFixed(4)}</li>
+          <li>平均ダメージ: ${result.critical.avg.toFixed(2)}</li>
           <li>下限ダメージ: ${result.critical.min}</li>
           <li>上限ダメージ: ${result.critical.max}</li>
         </ul>
@@ -71,3 +71,4 @@ function main() {
 }
 
 document.addEventListener("DOMContentLoaded", main);
+
