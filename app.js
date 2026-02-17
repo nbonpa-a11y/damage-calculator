@@ -40,11 +40,11 @@ function renderResult(result) {
 
   output.innerHTML = `
     <section>
-      <h3>合算ダメージ</h3>
+      <h3>ダメージ結果</h3>
       <ul>
-        <li>平均ダメージ: ${result.total.avg.toFixed(4)}</li>
-        <li>下限ダメージ: ${result.total.min}</li>
-        <li>上限ダメージ: ${result.total.max}</li>
+        <li>平均: ${result.total.avg.toFixed(2)}ダメージ</li>
+        <li>下限: ${result.total.min}ダメージ</li>
+        <li>上限: ${result.total.max}ダメージ</li>
       </ul>
     </section>
   `;
@@ -83,3 +83,4 @@ function main() {
 }
 
 document.addEventListener("DOMContentLoaded", main);
+
