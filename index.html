@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ダメージ計算ツール</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main>
+    <h1>ダメージ計算ツール</h1>
+
+    <label>計算するダメージ種類
+      <select id="damageType">
+        <option>物理ダメージ</option>
+        <option>属性特技ダメージ</option>
+      </select>
+    </label>
+
+    <section>
+      <h2>攻撃する側</h2>
+      <label>攻撃力
+        <input id="attackPower" type="number" min="1" step="1" />
+      </label>
+      <label>攻撃力のバフ、デバフ
+        <select id="attackStage"></select>
+      </label>
+      <label>攻撃倍率（未入力なら等倍）
+        <input id="attackMultiplier" type="number" step="0.01" placeholder="例: 0.75" />
+      </label>
+      <label>攻撃側のじゃんけん勝敗
+        <select id="jankenResult">
+          <option>無し、あいこ</option>
+          <option>勝ち</option>
+          <option>負け</option>
+        </select>
+      </label>
+    </section>
+
+    <section>
+      <h2>攻撃される側</h2>
+      <label>防御力
+        <input id="defensePower" type="number" min="1" step="1" />
+      </label>
+      <label>防御力のバフ、デバフ
+        <select id="defenseStage"></select>
+      </label>
+      <label>オート防御、守り
+        <select id="autoGuard">
+          <option>発動しない</option>
+          <option>発動する</option>
+        </select>
+      </label>
+    </section>
+
+    <button id="calculate">計算する</button>
+    <section id="output"></section>
+  </main>
+
+  <script src="calculator.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
