@@ -96,6 +96,7 @@
     const attackStage = Number.parseInt(params.attackStage, 10);
     const defenseStage = Number.parseInt(params.defenseStage, 10);
     const attackMultiplier = params.attackMultiplier === "" ? 0 : Number.parseFloat(params.attackMultiplier);
+    const hitCount = Number.parseInt(params.hitCount ?? "1", 10);
 
     if (!Number.isInteger(attackPower) || !Number.isInteger(defensePower)) {
       return { error: "攻撃力と防御力を入力してください" };
@@ -107,6 +108,10 @@
 
     if (!Number.isFinite(attackMultiplier)) {
       return { error: "攻撃倍率は数値で入力してください" };
+    }
+
+    if (![1, 2, 3].includes(hitCount)) {
+      return { error: "ヒット数は1〜3回を選択してください" };
     }
 
     const a = applyStage(attackPower, attackStage);
@@ -127,9 +132,20 @@
       autoGuardActive
     );
 
+    const normalSummary = summarizeDistribution(normal);
+    const criticalSummary = summarizeDistribution(critical);
+
     return {
-      normal: summarizeDistribution(normal),
-      critical: summarizeDistribution(critical),
+      normal: {
+        avg: normalSummary.avg * hitCount,
+        min: normalSummary.min * hitCount,
+        max: normalSummary.max * hitCount,
+      },
+      critical: {
+        avg: criticalSummary.avg * hitCount,
+        min: criticalSummary.min * hitCount,
+        max: criticalSummary.max * hitCount,
+      },
     };
   }
 
