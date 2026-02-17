@@ -97,6 +97,7 @@
     const defenseStage = Number.parseInt(params.defenseStage, 10);
     const attackMultiplier = params.attackMultiplier === "" ? 0 : Number.parseFloat(params.attackMultiplier);
     const hitCount = Number.parseInt(params.hitCount ?? "1", 10);
+    const criticalCount = Number.parseInt(params.criticalCount ?? "0", 10);
 
     if (!Number.isInteger(attackPower) || !Number.isInteger(defensePower)) {
       return { error: "攻撃力と防御力を入力してください" };
@@ -111,8 +112,14 @@
     }
 
     if (![1, 2, 3].includes(hitCount)) {
-      return { error: "ヒット数は1〜3回を選択してください" };
+      return { error: "攻撃ヒット数は1〜3回を選択してください" };
     }
+
+    if (!Number.isInteger(criticalCount) || criticalCount < 0 || criticalCount > hitCount) {
+      return { error: "クリティカル発生回数は0回以上、攻撃ヒット数以下で選択してください" };
+    }
+
+    const normalCount = hitCount - criticalCount;
 
     const a = applyStage(attackPower, attackStage);
     const b = applyStage(defensePower, defenseStage);
@@ -136,15 +143,14 @@
     const criticalSummary = summarizeDistribution(critical);
 
     return {
-      normal: {
-        avg: normalSummary.avg * hitCount,
-        min: normalSummary.min * hitCount,
-        max: normalSummary.max * hitCount,
+      total: {
+        avg: normalSummary.avg * normalCount + criticalSummary.avg * criticalCount,
+        min: normalSummary.min * normalCount + criticalSummary.min * criticalCount,
+        max: normalSummary.max * normalCount + criticalSummary.max * criticalCount,
       },
-      critical: {
-        avg: criticalSummary.avg ,
-        min: criticalSummary.min ,
-        max: criticalSummary.max ,
+      detail: {
+        normalCount,
+        criticalCount,
       },
     };
   }
@@ -163,4 +169,3 @@
 
   global.DamageCalculator = api;
 })(typeof window !== "undefined" ? window : globalThis);
-
