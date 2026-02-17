@@ -40,14 +40,37 @@ function renderResult(result) {
 
   output.innerHTML = `
     <section>
-      <h3>ダメージ結果</h3>
+      <h3>ダメージ計算結果</h3>
       <ul>
-        <li>平均: ${result.total.avg.toFixed(2)}ダメージ</li>
-        <li>下限: ${result.total.min}ダメージ</li>
-        <li>上限: ${result.total.max}ダメージ</li>
+        <li>平均ダメージ: ${result.total.avg.toFixed(4)}</li>
+        <li>下限ダメージ: ${result.total.min}</li>
+        <li>上限ダメージ: ${result.total.max}</li>
       </ul>
     </section>
   `;
+}
+
+function recalculate() {
+  const damageType = byId("damageType").value;
+
+  if (damageType === "属性特技ダメージ") {
+    byId("output").innerHTML = '<p>属性特技ダメージは準備中です。物理ダメージを選択してください。</p>';
+    return;
+  }
+
+  const result = DamageCalculator.calculatePhysical({
+    attackPower: byId("attackPower").value.trim(),
+    attackStage: byId("attackStage").value,
+    attackMultiplier: byId("attackMultiplier").value.trim(),
+    jankenResult: byId("jankenResult").value,
+    hitCount: byId("hitCount").value,
+    criticalCount: byId("criticalCount").value,
+    defensePower: byId("defensePower").value.trim(),
+    defenseStage: byId("defenseStage").value,
+    autoGuard: byId("autoGuard").value,
+  });
+
+  renderResult(result);
 }
 
 function main() {
@@ -55,32 +78,31 @@ function main() {
   fillStageSelect("defenseStage");
   syncCriticalCountOptions();
 
-  byId("hitCount").addEventListener("change", syncCriticalCountOptions);
+  const watchIds = [
+    "damageType",
+    "attackPower",
+    "attackStage",
+    "attackMultiplier",
+    "jankenResult",
+    "hitCount",
+    "criticalCount",
+    "defensePower",
+    "defenseStage",
+    "autoGuard",
+  ];
 
-  byId("calculate").addEventListener("click", () => {
-    const damageType = byId("damageType").value;
-    const output = byId("output");
-
-    if (damageType === "属性特技ダメージ") {
-      output.innerHTML = '<p>属性特技ダメージは準備中です。物理ダメージを選択してください。</p>';
-      return;
-    }
-
-    const result = DamageCalculator.calculatePhysical({
-      attackPower: byId("attackPower").value.trim(),
-      attackStage: byId("attackStage").value,
-      attackMultiplier: byId("attackMultiplier").value.trim(),
-      jankenResult: byId("jankenResult").value,
-      hitCount: byId("hitCount").value,
-      criticalCount: byId("criticalCount").value,
-      defensePower: byId("defensePower").value.trim(),
-      defenseStage: byId("defenseStage").value,
-      autoGuard: byId("autoGuard").value,
-    });
-
-    renderResult(result);
+  watchIds.forEach((id) => {
+    const el = byId(id);
+    el.addEventListener("input", recalculate);
+    el.addEventListener("change", recalculate);
   });
+
+  byId("hitCount").addEventListener("change", () => {
+    syncCriticalCountOptions();
+    recalculate();
+  });
+
+  recalculate();
 }
 
 document.addEventListener("DOMContentLoaded", main);
-
