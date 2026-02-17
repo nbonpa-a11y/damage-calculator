@@ -32,6 +32,16 @@ section {
   border-radius: 10px;
 }
 
+.inline-two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.inline-two label {
+  margin: 0;
+}
+
 .attacker-panel {
   border-color: #e03131;
 }
@@ -63,7 +73,8 @@ button {
 
 @media (max-width: 760px) {
   .side-columns,
-  .result-columns {
+  .result-columns,
+  .inline-two {
     grid-template-columns: 1fr;
   }
 }
