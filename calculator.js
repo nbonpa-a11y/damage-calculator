@@ -142,9 +142,9 @@
         max: normalSummary.max * hitCount,
       },
       critical: {
-        avg: criticalSummary.avg * hitCount,
-        min: criticalSummary.min * hitCount,
-        max: criticalSummary.max * hitCount,
+        avg: criticalSummary.avg ,
+        min: criticalSummary.min ,
+        max: criticalSummary.max ,
       },
     };
   }
@@ -163,3 +163,4 @@
 
   global.DamageCalculator = api;
 })(typeof window !== "undefined" ? window : globalThis);
+
