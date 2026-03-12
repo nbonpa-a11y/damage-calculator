@@ -153,8 +153,7 @@ button {
 
 @media (max-width: 760px) {
   .side-columns,
-  .result-columns,
-  .inline-two {
+  .result-columns {
     grid-template-columns: 1fr;
   }
 }
@@ -200,3 +199,4 @@ button {
   padding-left: 0;
   margin-left: 0;
 }
+
