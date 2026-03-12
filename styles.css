@@ -54,7 +54,7 @@ section {
 .inline-two {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 4px;
 }
 
 .inline-two label {
@@ -100,7 +100,7 @@ button {
 .panel-head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 8px;
 }
 
@@ -199,4 +199,3 @@ button {
   padding-left: 0;
   margin-left: 0;
 }
-
