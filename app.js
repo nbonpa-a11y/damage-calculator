@@ -47,6 +47,7 @@ function createDefaultDefender() {
     defenseStage: "0",
     autoGuard: "無し",
     targetHp: "",
+    collapsed: false,
     detailsExpanded: false,
     attributes,
   };
@@ -218,7 +219,7 @@ function renderDefender() {
 
   byId("defenderColumn").innerHTML = `
     <section class="side-panel defender-panel">
-      <div class="panel-head single-input-head">
+      <div class="panel-head">
         <input
           type="text"
           class="header-name-input defender-name-input"
@@ -227,8 +228,12 @@ function renderDefender() {
           data-defender-field="name"
           aria-label="攻撃される側の名前"
         />
+        <div class="panel-actions">
+          <button type="button" class="mini-toggle" data-action="toggle-defender-collapsed">${d.collapsed ? "展開▼" : "格納▲"}</button>
+        </div>
       </div>
 
+      ${d.collapsed ? "" : `
       ${hasPhysical ? `
         <label>防御力
           <input type="number" min="1" step="1" value="${d.defensePower}" data-defender-field="defensePower" />
@@ -440,8 +445,17 @@ function handleClick(event) {
     state.defender.detailsExpanded = !state.defender.detailsExpanded;
     renderDefender();
     recalculate();
+    return;
+  }
+
+  const defenderCollapsedToggle = event.target.closest('[data-action="toggle-defender-collapsed"]');
+  if (defenderCollapsedToggle) {
+    state.defender.collapsed = !state.defender.collapsed;
+    renderDefender();
+    recalculate();
   }
 }
+
 
 function handleInputOrChange(event) {
   const attackerIndexText = event.target.dataset.index;
@@ -487,3 +501,4 @@ function main() {
 }
 
 document.addEventListener("DOMContentLoaded", main);
+
