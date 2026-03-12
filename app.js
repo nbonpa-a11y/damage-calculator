@@ -105,7 +105,7 @@ function renderAttackers() {
             aria-label="攻撃側${n}人目の名前"
           />
           <div class="panel-actions">
-            <button type="button" class="mini-toggle" data-action="toggle-attacker-collapsed" data-index="${index}">${attacker.collapsed ? "展開▼" : "格納▲"}</button>
+            <button type="button" class="mini-toggle" data-action="toggle-attacker-collapsed" data-index="${index}">${attacker.collapsed ? "-----展開▼-----" : "-----格納▲-----"}</button>
             ${showDelete ? `<button type="button" class="mini-delete" data-action="delete-attacker" data-index="${index}">削除×</button>` : ""}
           </div>
         </div>
@@ -230,7 +230,7 @@ function renderDefender() {
           aria-label="攻撃される側の名前"
         />
         <div class="panel-actions">
-          <button type="button" class="mini-toggle" data-action="toggle-defender-collapsed">${d.collapsed ? "展開▼" : "格納▲"}</button>
+          <button type="button" class="mini-toggle" data-action="toggle-defender-collapsed">${d.collapsed ? "-----展開▼-----" : "-----格納▲-----"}</button>
         </div>
       </div>
 
@@ -510,4 +510,5 @@ function main() {
 }
 
 document.addEventListener("DOMContentLoaded", main);
+
 
