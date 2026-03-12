@@ -53,7 +53,7 @@ section {
 
 .inline-two {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 2fr 3fr;
   gap: 4px;
 }
 
@@ -127,6 +127,7 @@ button {
 .panel-actions {
   display: flex;
   align-items: center;
+  flex: 1;
   gap: 8px;
 }
 
@@ -142,8 +143,19 @@ button {
 }
 
 .mini-delete {
+  margin-left: auto;
   background: #fff5f5;
   color: #c92a2a;
+}
+
+.attribute-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px 12px;
+}
+
+.attribute-grid label {
+  margin: 0;
 }
 
 .error {
