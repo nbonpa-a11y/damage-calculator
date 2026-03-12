@@ -14,8 +14,8 @@ const STATUS_LABELS = {
   闇: "呪い",
 };
 
-function createDefaultAttacker() {␊
-  return {␊
+function createDefaultAttacker() {
+  return {
     damageType: "打撃",
     attackPower: "",
     attackStage: "0",
@@ -78,7 +78,7 @@ function syncCriticalCount(attacker) {
 }
 
 function renderAttackers() {
-  const html = state.attackers.map((attacker, index) => {␊
+  const html = state.attackers.map((attacker, index) => {
     syncCriticalCount(attacker);
     const n = index + 1;
     const showDelete = state.attackers.length > 1;
@@ -105,7 +105,7 @@ function renderAttackers() {
           <label><input type="radio" name="damageType-${index}" value="打撃" data-index="${index}" data-field="damageType"${isPhysical ? " checked" : ""}/> 打撃</label>
           <label><input type="radio" name="damageType-${index}" value="特技(全体属性)" data-index="${index}" data-field="damageType"${!isPhysical ? " checked" : ""}/> 特技(全体属性)</label>
         </div>
-        
+
         ${isPhysical ? `
           <label>攻撃力
             <input type="number" min="1" step="1" value="${attacker.attackPower}" data-index="${index}" data-field="attackPower" />
@@ -168,7 +168,7 @@ function renderAttackers() {
                   <option value="2"${attacker.hitCount === "2" ? " selected" : ""}>2回</option>
                   <option value="3"${attacker.hitCount === "3" ? " selected" : ""}>3回</option>
                 </select>
-              </label>
+</label>
               <label>クリティカル発生回数
                 <select data-index="${index}" data-field="criticalCount">${criticalOptions}</select>
               </label>
@@ -338,8 +338,7 @@ function recalculate() {
     totalMin += result.total.min;
     totalMax += result.total.max;
   }
-
-  const finalResult = {
+const finalResult = {
     total: {
       avg: totalAvg,
       min: totalMin,
@@ -394,8 +393,8 @@ function handleClick(event) {
     return;
   }
 
-  const attackerToggle = event.target.closest('[data-action="toggle-attacker-details"]');␊
-  if (attackerToggle) {␊
+  const attackerToggle = event.target.closest('[data-action="toggle-attacker-details"]');
+  if (attackerToggle) {
     const index = Number.parseInt(attackerToggle.dataset.index, 10);
     if (Number.isInteger(index)) {
       state.attackers[index].detailsExpanded = !state.attackers[index].detailsExpanded;
@@ -468,6 +467,3 @@ function main() {
 }
 
 document.addEventListener("DOMContentLoaded", main);
-
-
-
