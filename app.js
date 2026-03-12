@@ -244,7 +244,7 @@ function renderDefender() {
       ${hasAttribute ? `
         <div class="attribute-grid">
           ${usedAttributes.map((attr) => `
-            <label>${attr}属性耐性
+            <label>${attr}耐性
               <select data-defender-attr="${attr}" data-defender-kind="resistance">
                 ${stageOptions(-4, 9, d.attributes[attr].resistance)}
               </select>
@@ -510,3 +510,4 @@ function main() {
 }
 
 document.addEventListener("DOMContentLoaded", main);
+
