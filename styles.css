@@ -108,14 +108,26 @@ button {
   margin: 0;
 }
 
+.panel-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mini-toggle,
 .mini-delete {
   margin: 0;
   padding: 6px 10px;
   border: 1px solid #dee2e6;
   border-radius: 6px;
+  background: #f8f9fa;
+  color: #212529;
+  font-weight: 700;
+}
+
+.mini-delete {
   background: #fff5f5;
   color: #c92a2a;
-  font-weight: 700;
 }
 
 .error {
@@ -172,4 +184,5 @@ button {
   padding-left: 0;
   margin-left: 0;
 }
+
 
