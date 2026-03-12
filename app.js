@@ -226,7 +226,7 @@ function renderDefender() {
           value="${d.name}"
           placeholder="攻撃される側"
           data-defender-field="name"
-          aria-label="攻撃される側の名前"
+          aria-label="攻撃されるの名前"
         />
         <div class="panel-actions">
           <button type="button" class="mini-toggle" data-action="toggle-defender-collapsed">${d.collapsed ? "展開▼" : "格納▲"}</button>
@@ -277,6 +277,7 @@ function renderDefender() {
           <input type="number" min="1" step="1" value="${d.targetHp}" data-defender-field="targetHp" />
         </label>
       ` : ""}
+      `}
     </section>
   `;
 }
@@ -456,7 +457,6 @@ function handleClick(event) {
   }
 }
 
-
 function handleInputOrChange(event) {
   const attackerIndexText = event.target.dataset.index;
   const attackerField = event.target.dataset.field;
@@ -501,4 +501,3 @@ function main() {
 }
 
 document.addEventListener("DOMContentLoaded", main);
-
