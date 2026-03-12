@@ -108,6 +108,22 @@ button {
   margin: 0;
 }
 
+.header-name-input {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.attacker-name-input,
+.defender-name-input {
+  width: 6.6em;
+  padding: 6px 8px;
+}
+
+.single-input-head {
+  justify-content: flex-start;
+}
+
 .panel-actions {
   display: flex;
   align-items: center;
@@ -184,5 +200,3 @@ button {
   padding-left: 0;
   margin-left: 0;
 }
-
-
