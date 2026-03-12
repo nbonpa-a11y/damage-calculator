@@ -215,6 +215,7 @@ function getUsedModes() {
 function renderDefender() {
   const { hasPhysical, usedAttributes } = getUsedModes();
   const hasAttribute = usedAttributes.length > 0;
+  const statusAttributes = usedAttributes.filter((attr) => attr !== "光");
   const d = state.defender;
 
   byId("defenderColumn").innerHTML = `
@@ -226,7 +227,7 @@ function renderDefender() {
           value="${d.name}"
           placeholder="攻撃される側"
           data-defender-field="name"
-          aria-label="攻撃されるの名前"
+          aria-label="攻撃される側の名前"
         />
         <div class="panel-actions">
           <button type="button" class="mini-toggle" data-action="toggle-defender-collapsed">${d.collapsed ? "展開▼" : "格納▲"}</button>
@@ -240,13 +241,17 @@ function renderDefender() {
         </label>
       ` : ""}
 
-      ${hasAttribute ? usedAttributes.map((attr) => `
-        <label>${attr}属性耐性
-          <select data-defender-attr="${attr}" data-defender-kind="resistance">
-            ${stageOptions(-4, 9, d.attributes[attr].resistance)}
-          </select>
-        </label>
-      `).join("") : ""}
+      ${hasAttribute ? `
+        <div class="attribute-grid">
+          ${usedAttributes.map((attr) => `
+            <label>${attr}属性耐性
+              <select data-defender-attr="${attr}" data-defender-kind="resistance">
+                ${stageOptions(-4, 9, d.attributes[attr].resistance)}
+              </select>
+            </label>
+          `).join("")}
+        </div>
+      ` : ""}
 
       <button type="button" class="details-toggle" data-action="toggle-defender-details">${detailsLabel(d.detailsExpanded)}</button>
 
@@ -257,14 +262,18 @@ function renderDefender() {
           </label>
         ` : ""}
 
-        ${hasAttribute ? usedAttributes.filter((attr) => attr !== "光").map((attr) => `
-          <label>${STATUS_LABELS[attr] || `${attr}属性状態異常`}
-            <select data-defender-attr="${attr}" data-defender-kind="status">
-              <option value="none"${d.attributes[attr].status === "none" ? " selected" : ""}>無し</option>
-              ${stageOptions(1, 9, d.attributes[attr].status)}
-            </select>
-          </label>
-        `).join("") : ""}
+        ${statusAttributes.length > 0 ? `
+          <div class="attribute-grid">
+            ${statusAttributes.map((attr) => `
+              <label>${STATUS_LABELS[attr] || `${attr}属性状態異常`}
+                <select data-defender-attr="${attr}" data-defender-kind="status">
+                  <option value="none"${d.attributes[attr].status === "none" ? " selected" : ""}>無し</option>
+                  ${stageOptions(1, 9, d.attributes[attr].status)}
+                </select>
+              </label>
+            `).join("")}
+          </div>
+        ` : ""}
 
         <label>オート防御、守り
           <select data-defender-field="autoGuard">
@@ -355,7 +364,7 @@ function recalculate() {
       });
 
     if (result.error) {
-      renderResult({ error: `打撃を選択している場合は${result.error}` });
+      renderResult({ error: `打撃選択している場合は${result.error}` });
       return;
     }
 
