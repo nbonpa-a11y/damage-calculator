@@ -14,8 +14,8 @@ const STATUS_LABELS = {
   闇: "呪い",
 };
 
-function createDefaultAttacker() {
-  return {
+function createDefaultAttacker() {␊
+  return {␊
     damageType: "打撃",
     attackPower: "",
     attackStage: "0",
@@ -29,6 +29,7 @@ function createDefaultAttacker() {
     attributeHitCount: "1",
     jankenResult: "無し、あいこ",
     penetration: "無し",
+    collapsed: false,
     detailsExpanded: false,
   };
 }
@@ -77,7 +78,7 @@ function syncCriticalCount(attacker) {
 }
 
 function renderAttackers() {
-  const html = state.attackers.map((attacker, index) => {
+  const html = state.attackers.map((attacker, index) => {␊
     syncCriticalCount(attacker);
     const n = index + 1;
     const showDelete = state.attackers.length > 1;
@@ -92,15 +93,19 @@ function renderAttackers() {
       <section class="side-panel attacker-panel" data-attacker-index="${index}">
         <div class="panel-head">
           <h2>攻撃する側 ${n}人目</h2>
-          ${showDelete ? `<button type="button" class="mini-delete" data-action="delete-attacker" data-index="${index}">削除×</button>` : ""}
+          <div class="panel-actions">
+            <button type="button" class="mini-toggle" data-action="toggle-attacker-collapsed" data-index="${index}">${attacker.collapsed ? "展開▼" : "格納▲"}</button>
+            ${showDelete ? `<button type="button" class="mini-delete" data-action="delete-attacker" data-index="${index}">削除×</button>` : ""}
+          </div>
         </div>
 
+        ${attacker.collapsed ? "" : `
         <div class="damage-type-group">
           <span>攻撃手段</span>
           <label><input type="radio" name="damageType-${index}" value="打撃" data-index="${index}" data-field="damageType"${isPhysical ? " checked" : ""}/> 打撃</label>
           <label><input type="radio" name="damageType-${index}" value="特技(全体属性)" data-index="${index}" data-field="damageType"${!isPhysical ? " checked" : ""}/> 特技(全体属性)</label>
         </div>
-
+        
         ${isPhysical ? `
           <label>攻撃力
             <input type="number" min="1" step="1" value="${attacker.attackPower}" data-index="${index}" data-field="attackPower" />
@@ -178,6 +183,7 @@ function renderAttackers() {
             </label>
           `}
         ` : ""}
+        `}
       </section>
     `;
   }).join("");
@@ -388,12 +394,23 @@ function handleClick(event) {
     return;
   }
 
-  const attackerToggle = event.target.closest('[data-action="toggle-attacker-details"]');
-  if (attackerToggle) {
+  const attackerToggle = event.target.closest('[data-action="toggle-attacker-details"]');␊
+  if (attackerToggle) {␊
     const index = Number.parseInt(attackerToggle.dataset.index, 10);
     if (Number.isInteger(index)) {
       state.attackers[index].detailsExpanded = !state.attackers[index].detailsExpanded;
       renderAll();
+      recalculate();
+    }
+    return;
+  }
+
+  const attackerCollapsedToggle = event.target.closest('[data-action="toggle-attacker-collapsed"]');
+  if (attackerCollapsedToggle) {
+    const index = Number.parseInt(attackerCollapsedToggle.dataset.index, 10);
+    if (Number.isInteger(index)) {
+      state.attackers[index].collapsed = !state.attackers[index].collapsed;
+      renderAttackers();
       recalculate();
     }
     return;
@@ -451,5 +468,6 @@ function main() {
 }
 
 document.addEventListener("DOMContentLoaded", main);
+
 
 
