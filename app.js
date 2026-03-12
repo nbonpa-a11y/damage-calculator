@@ -16,6 +16,7 @@ const STATUS_LABELS = {
 
 function createDefaultAttacker() {
   return {
+    name: "",
     damageType: "打撃",
     attackPower: "",
     attackStage: "0",
@@ -41,6 +42,7 @@ function createDefaultDefender() {
   });
 
   return {
+    name: "",
     defensePower: "",
     defenseStage: "0",
     autoGuard: "無し",
@@ -92,7 +94,15 @@ function renderAttackers() {
     return `
       <section class="side-panel attacker-panel" data-attacker-index="${index}">
         <div class="panel-head">
-          <h2>攻撃する側 ${n}人目</h2>
+          <input
+            type="text"
+            class="header-name-input attacker-name-input"
+            value="${attacker.name}"
+            placeholder="攻撃側${n}人目"
+            data-index="${index}"
+            data-field="name"
+            aria-label="攻撃側${n}人目の名前"
+          />
           <div class="panel-actions">
             <button type="button" class="mini-toggle" data-action="toggle-attacker-collapsed" data-index="${index}">${attacker.collapsed ? "展開▼" : "格納▲"}</button>
             ${showDelete ? `<button type="button" class="mini-delete" data-action="delete-attacker" data-index="${index}">削除×</button>` : ""}
@@ -168,7 +178,7 @@ function renderAttackers() {
                   <option value="2"${attacker.hitCount === "2" ? " selected" : ""}>2回</option>
                   <option value="3"${attacker.hitCount === "3" ? " selected" : ""}>3回</option>
                 </select>
-</label>
+              </label>
               <label>クリティカル発生回数
                 <select data-index="${index}" data-field="criticalCount">${criticalOptions}</select>
               </label>
@@ -208,7 +218,16 @@ function renderDefender() {
 
   byId("defenderColumn").innerHTML = `
     <section class="side-panel defender-panel">
-      <h2>攻撃される側</h2>
+      <div class="panel-head single-input-head">
+        <input
+          type="text"
+          class="header-name-input defender-name-input"
+          value="${d.name}"
+          placeholder="攻撃される側"
+          data-defender-field="name"
+          aria-label="攻撃される側の名前"
+        />
+      </div>
 
       ${hasPhysical ? `
         <label>防御力
@@ -338,7 +357,8 @@ function recalculate() {
     totalMin += result.total.min;
     totalMax += result.total.max;
   }
-const finalResult = {
+
+  const finalResult = {
     total: {
       avg: totalAvg,
       min: totalMin,
