@@ -85,6 +85,20 @@ function attrColorClass(attr) {
   return table[attr] || "";
 }
 
+function attrOptionColor(attr) {
+  const table = {
+    火: "#ffd9d9",
+    水: "#6ea8ff",
+    電気: "#fff7cc",
+    土: "#ffe8cc",
+    風: "#ddf7dd",
+    氷: "#f2fbff",
+    光: "#ffffff",
+    闇: "#eddcff",
+  };
+  return table[attr] || "#ffffff";
+}
+
 function fillWithHyphen(baseLabel, width) {
   const safeWidth = Math.max(0, width || 0);
   const charWidth = 8;
@@ -140,8 +154,10 @@ function renderAttackers() {
         ${attacker.collapsed ? "" : `
         <div class="damage-type-group">
           <span>攻撃手段</span>
-          <label><input type="radio" name="damageType-${index}" value="打撃" data-index="${index}" data-field="damageType"${isPhysical ? " checked" : ""}/> 打撃</label>
-          <label><input type="radio" name="damageType-${index}" value="特技(全体属性)" data-index="${index}" data-field="damageType"${!isPhysical ? " checked" : ""}/> 特技(全体属性)</label>
+          <div class="segmented-control">
+            <label><input type="radio" name="damageType-${index}" value="打撃" data-index="${index}" data-field="damageType"${isPhysical ? " checked" : ""}/><span>打撃</span></label>
+            <label><input type="radio" name="damageType-${index}" value="特技(全体属性)" data-index="${index}" data-field="damageType"${!isPhysical ? " checked" : ""}/><span>特技(全体属性)</span></label>
+          </div>
         </div>
 
         ${isPhysical ? `
@@ -151,12 +167,14 @@ function renderAttackers() {
         ` : `
           <div class="level-radio-group">
             <span>攻撃する側のレベル</span>
-            <label><input type="radio" name="attributeLevel-${index}" value="50" data-index="${index}" data-field="attributeLevel"${attacker.attributeLevel === "50" ? " checked" : ""}/>50レベル</label>
-            <label><input type="radio" name="attributeLevel-${index}" value="100" data-index="${index}" data-field="attributeLevel"${attacker.attributeLevel === "100" ? " checked" : ""}/>100レベル</label>
+            <div class="segmented-control">
+              <label><input type="radio" name="attributeLevel-${index}" value="50" data-index="${index}" data-field="attributeLevel"${attacker.attributeLevel === "50" ? " checked" : ""}/><span>50レベル</span></label>
+              <label><input type="radio" name="attributeLevel-${index}" value="100" data-index="${index}" data-field="attributeLevel"${attacker.attributeLevel === "100" ? " checked" : ""}/><span>100レベル</span></label>
+            </div>
           </div>
           <label>特技の属性
             <select class="attr-select ${attrColorClass(attacker.attributeType)}" data-index="${index}" data-field="attributeType">
-              ${ATTRIBUTES.map((attr) => `<option${attr === attacker.attributeType ? " selected" : ""}>${attr}</option>`).join("")}
+              ${ATTRIBUTES.map((attr) => `<option style="background:${attrOptionColor(attr)}"${attr === attacker.attributeType ? " selected" : ""}>${attr}</option>`).join("")}
             </select>
           </label>
         `}
@@ -165,7 +183,7 @@ function renderAttackers() {
 
         ${attacker.detailsExpanded ? `
           ${isPhysical ? `
-            <label>攻撃力のバフ、デバフ状態
+            <label>攻のバフ、デバフ状態
               <select data-index="${index}" data-field="attackStage">${stageOptions(-9, 9, attacker.attackStage)}</select>
             </label>
             <label>攻撃倍率+値（未入力なら等倍）
@@ -221,13 +239,14 @@ function renderAttackers() {
               </div>
             </div>
           ` : `
-            <label>特技ヒット数
-              <select data-index="${index}" data-field="attributeHitCount">
-                <option value="1"${attacker.attributeHitCount === "1" ? " selected" : ""}>1回</option>
-                <option value="2"${attacker.attributeHitCount === "2" ? " selected" : ""}>2回</option>
-                <option value="3"${attacker.attributeHitCount === "3" ? " selected" : ""}>3回</option>
-              </select>
-            </label>
+            <div class="segmented-row">
+              <span>特技ヒット数</span>
+              <div class="segmented-control vertical-control">
+                <label><input type="radio" name="attributeHitCount-${index}" value="1" data-index="${index}" data-field="attributeHitCount"${attacker.attributeHitCount === "1" ? " checked" : ""}/><span>1回</span></label>
+                <label><input type="radio" name="attributeHitCount-${index}" value="2" data-index="${index}" data-field="attributeHitCount"${attacker.attributeHitCount === "2" ? " checked" : ""}/><span>2回</span></label>
+                <label><input type="radio" name="attributeHitCount-${index}" value="3" data-index="${index}" data-field="attributeHitCount"${attacker.attributeHitCount === "3" ? " checked" : ""}/><span>3回</span></label>
+              </div>
+            </div>
           `}
         ` : ""}
         `}
@@ -425,7 +444,7 @@ function recalculate() {
   if (d.targetHp.trim() !== "") {
     const hp = Number.parseInt(d.targetHp, 10);
     if (!Number.isInteger(hp) || hp <= 0) {
-      renderResult({ error: "HPは正の整数で入力してください" });
+      renderResult({ error: "HPは正の整で入力してください" });
       return;
     }
 
