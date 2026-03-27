@@ -142,6 +142,10 @@ button {
   font-weight: 700;
 }
 
+.fill-toggle {
+  flex: 1;
+}
+
 .mini-delete {
   margin-left: auto;
   background: #fff5f5;
