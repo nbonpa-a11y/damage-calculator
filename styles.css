@@ -116,9 +116,9 @@ button {
 .add-attacker {
   width: 100%;
   margin: 12px 0 8px;
-  border-color: #495057;
-  border-radius: 10px;
-  background: #eef2f7;
+  border: 2px dashed #111;
+  border-radius: 999px;
+  background: transparent;
   font-weight: 600;
 }
 
@@ -160,9 +160,10 @@ button {
 .mini-delete {
   margin: 0;
   padding: 6px 10px;
-  border: 2px solid #495057;
-  border-radius: 9px;
-  background: #f8fafc;
+  border: 2px dashed #111;
+  border-radius: 999px;
+  background: transparent;
+  border-style: dashed;
   color: #212529;
   font-weight: 700;
 }
@@ -173,10 +174,80 @@ button {
 
 .mini-delete {
   margin-left: auto;
+  border-style: solid;
   background: #ffe3e3;
-  border-color: #b02a37;
+  border-color: #111;
   color: #a61e4d;
 }
+
+.attacker-name-input,
+.defender-name-input {
+  border: 2px solid #111;
+}
+
+.segmented-row {
+  margin: 8px 0;
+}
+
+.segmented-row > span {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.segmented-control {
+  display: inline-flex;
+  border: 2px solid #111;
+  border-radius: 999px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.segmented-control label {
+  margin: 0;
+}
+
+.segmented-control input {
+  display: none;
+}
+
+.segmented-control label span {
+  display: block;
+  padding: 6px 12px;
+  border-right: 1px solid #111;
+  cursor: pointer;
+}
+
+.segmented-control label:last-child span {
+  border-right: none;
+}
+
+.segmented-control input:checked + span {
+  background: #dbe4ff;
+  font-weight: 700;
+}
+
+.vertical-control {
+  flex-direction: column;
+  border-radius: 12px;
+}
+
+.vertical-control label span {
+  border-right: none;
+  border-bottom: 1px solid #111;
+}
+
+.vertical-control label:last-child span {
+  border-bottom: none;
+}
+
+.attr-select.attr-fire { background: #ffd9d9; }
+.attr-select.attr-water { background: #d8ebff; }
+.attr-select.attr-electric { background: #fff7cc; }
+.attr-select.attr-earth { background: #ffe8cc; }
+.attr-select.attr-wind { background: #ddf7dd; }
+.attr-select.attr-ice { background: #ddf4ff; }
+.attr-select.attr-light { background: #ffffff; }
+.attr-select.attr-dark { background: #eddcff; }
 
 .attribute-grid {
   display: grid;
