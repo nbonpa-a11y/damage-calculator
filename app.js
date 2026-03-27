@@ -71,6 +71,20 @@ function detailsLabel(expanded) {
   return expanded ? "その他の詳細を格納▲" : "その他の詳細入力▼";
 }
 
+function attrColorClass(attr) {
+  const table = {
+    火: "attr-fire",
+    水: "attr-water",
+    電気: "attr-electric",
+    土: "attr-earth",
+    風: "attr-wind",
+    氷: "attr-ice",
+    光: "attr-light",
+    闇: "attr-dark",
+  };
+  return table[attr] || "";
+}
+
 function fillWithHyphen(baseLabel, width) {
   const safeWidth = Math.max(0, width || 0);
   const charWidth = 8;
@@ -104,11 +118,6 @@ function renderAttackers() {
     const n = index + 1;
     const showDelete = state.attackers.length > 1;
     const isPhysical = attacker.damageType === "打撃";
-
-    const criticalOptions = [0, 1, 2, 3]
-      .filter((x) => x <= Number.parseInt(attacker.hitCount, 10))
-      .map((x) => `<option value="${x}"${String(x) === attacker.criticalCount ? " selected" : ""}>${x}回</option>`)
-      .join("");
 
     return `
       <section class="side-panel attacker-panel" data-attacker-index="${index}">
@@ -146,7 +155,7 @@ function renderAttackers() {
             <label><input type="radio" name="attributeLevel-${index}" value="100" data-index="${index}" data-field="attributeLevel"${attacker.attributeLevel === "100" ? " checked" : ""}/>100レベル</label>
           </div>
           <label>特技の属性
-            <select data-index="${index}" data-field="attributeType">
+            <select class="attr-select ${attrColorClass(attacker.attributeType)}" data-index="${index}" data-field="attributeType">
               ${ATTRIBUTES.map((attr) => `<option${attr === attacker.attributeType ? " selected" : ""}>${attr}</option>`).join("")}
             </select>
           </label>
@@ -167,40 +176,49 @@ function renderAttackers() {
               <input type="number" step="0.01" placeholder="親アヒルのみの例：0.5" value="${attacker.skillMultiplier}" data-index="${index}" data-field="skillMultiplier" />
             </label>
             <label>${attacker.attributeType}属性倍率
-              <select data-index="${index}" data-field="attributeRateStage">
+              <select class="attr-select ${attrColorClass(attacker.attributeType)}" data-index="${index}" data-field="attributeRateStage">
                 <option value="none"${attacker.attributeRateStage === "none" ? " selected" : ""}>無し</option>
                 ${stageOptions(1, 9, attacker.attributeRateStage)}
               </select>
             </label>
           `}
 
-          <label>攻撃側のじゃんけん勝敗
-            <select data-index="${index}" data-field="jankenResult">
-              <option${attacker.jankenResult === "無し、あいこ" ? " selected" : ""}>無し、あいこ</option>
-              <option${attacker.jankenResult === "勝ち" ? " selected" : ""}>勝ち</option>
-              <option${attacker.jankenResult === "負け" ? " selected" : ""}>負け</option>
-            </select>
-          </label>
+          <div class="segmented-row">
+            <span>攻撃側のじゃんけん勝敗</span>
+            <div class="segmented-control">
+              <label><input type="radio" name="jankenResult-${index}" value="無し、あいこ" data-index="${index}" data-field="jankenResult"${attacker.jankenResult === "無し、あいこ" ? " checked" : ""}/><span>無し、あいこ</span></label>
+              <label><input type="radio" name="jankenResult-${index}" value="勝ち" data-index="${index}" data-field="jankenResult"${attacker.jankenResult === "勝ち" ? " checked" : ""}/><span>勝ち</span></label>
+              <label><input type="radio" name="jankenResult-${index}" value="負け" data-index="${index}" data-field="jankenResult"${attacker.jankenResult === "負け" ? " checked" : ""}/><span>負け</span></label>
+            </div>
+          </div>
 
-          <label>貫通
-            <select data-index="${index}" data-field="penetration">
-              <option${attacker.penetration === "無し" ? " selected" : ""}>無し</option>
-              <option${attacker.penetration === "有り" ? " selected" : ""}>有り</option>
-            </select>
-          </label>
+          <div class="segmented-row">
+            <span>貫通</span>
+            <div class="segmented-control">
+              <label><input type="radio" name="penetration-${index}" value="無し" data-index="${index}" data-field="penetration"${attacker.penetration === "無し" ? " checked" : ""}/><span>無し</span></label>
+              <label><input type="radio" name="penetration-${index}" value="有り" data-index="${index}" data-field="penetration"${attacker.penetration === "有り" ? " checked" : ""}/><span>有り</span></label>
+            </div>
+          </div>
 
           ${isPhysical ? `
             <div class="inline-two">
-              <label>攻撃ヒット数
-                <select data-index="${index}" data-field="hitCount">
-                  <option value="1"${attacker.hitCount === "1" ? " selected" : ""}>1回</option>
-                  <option value="2"${attacker.hitCount === "2" ? " selected" : ""}>2回</option>
-                  <option value="3"${attacker.hitCount === "3" ? " selected" : ""}>3回</option>
-                </select>
-              </label>
-              <label>クリティカル発生回数
-                <select data-index="${index}" data-field="criticalCount">${criticalOptions}</select>
-              </label>
+              <div class="segmented-row">
+                <span>攻撃ヒット数</span>
+                <div class="segmented-control vertical-control">
+                  <label><input type="radio" name="hitCount-${index}" value="1" data-index="${index}" data-field="hitCount"${attacker.hitCount === "1" ? " checked" : ""}/><span>1回</span></label>
+                  <label><input type="radio" name="hitCount-${index}" value="2" data-index="${index}" data-field="hitCount"${attacker.hitCount === "2" ? " checked" : ""}/><span>2回</span></label>
+                  <label><input type="radio" name="hitCount-${index}" value="3" data-index="${index}" data-field="hitCount"${attacker.hitCount === "3" ? " checked" : ""}/><span>3回</span></label>
+                </div>
+              </div>
+              <div class="segmented-row">
+                <span>クリティカル発生回数</span>
+                <div class="segmented-control vertical-control">
+                  ${[0, 1, 2, 3]
+                    .filter((x) => x <= Number.parseInt(attacker.hitCount, 10))
+                    .map((x) => `<label><input type="radio" name="criticalCount-${index}" value="${x}" data-index="${index}" data-field="criticalCount"${String(x) === attacker.criticalCount ? " checked" : ""}/><span>${x}回</span></label>`)
+                    .join("")}
+                </div>
+              </div>
             </div>
           ` : `
             <label>特技ヒット数
@@ -265,7 +283,7 @@ function renderDefender() {
         <div class="attribute-grid">
           ${usedAttributes.map((attr) => `
             <label>${attr}属性耐性
-              <select data-defender-attr="${attr}" data-defender-kind="resistance">
+              <select class="attr-select ${attrColorClass(attr)}" data-defender-attr="${attr}" data-defender-kind="resistance">
                 ${stageOptions(-4, 9, d.attributes[attr].resistance)}
               </select>
             </label>
@@ -286,7 +304,7 @@ function renderDefender() {
           <div class="attribute-grid">
             ${statusAttributes.map((attr) => `
               <label>${STATUS_LABELS[attr] || `${attr}属性状態異常`}
-                <select data-defender-attr="${attr}" data-defender-kind="status">
+                <select class="attr-select ${attrColorClass(attr)}" data-defender-attr="${attr}" data-defender-kind="status">
                   <option value="none"${d.attributes[attr].status === "none" ? " selected" : ""}>無し</option>
                   ${stageOptions(1, 9, d.attributes[attr].status)}
                 </select>
@@ -295,12 +313,13 @@ function renderDefender() {
           </div>
         ` : ""}
 
-        <label>オート防御、守り
-          <select data-defender-field="autoGuard">
-            <option${d.autoGuard === "無し" ? " selected" : ""}>無し</option>
-            <option${d.autoGuard === "有り" ? " selected" : ""}>有り</option>
-          </select>
-        </label>
+        <div class="segmented-row">
+          <span>オート防御、守り</span>
+          <div class="segmented-control">
+            <label><input type="radio" name="autoGuard" value="無し" data-defender-field="autoGuard"${d.autoGuard === "無し" ? " checked" : ""}/><span>無し</span></label>
+            <label><input type="radio" name="autoGuard" value="有り" data-defender-field="autoGuard"${d.autoGuard === "有り" ? " checked" : ""}/><span>有り</span></label>
+          </div>
+        </div>
 
         <label>HP(入力すると残りHPも下に出ます)
           <input type="number" min="1" step="1" value="${d.targetHp}" data-defender-field="targetHp" />
