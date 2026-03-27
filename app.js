@@ -88,8 +88,8 @@ function attrColorClass(attr) {
 function attrOptionColor(attr) {
   const table = {
     火: "#ffc7c7",
-    水: "#6ea8ff",
-    電気: "#fff7cc",
+    水: "#7ab2ff",
+    電気: "#ffef9c",
     土: "#ffe8cc",
     風: "#ddf7dd",
     氷: "#dceeff",
@@ -424,7 +424,7 @@ function recalculate() {
       });
 
     if (result.error) {
-      renderResult({ error: `打撃を選択している場合は${result.error}` });
+      renderResult({ error: `打撃を選択している合は${result.error}` });
       return;
     }
 
