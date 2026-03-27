@@ -64,12 +64,12 @@ section {
 
 .attacker-panel {
   border-color: #d94848;
-  background: #fff5f5;
+  background: #fff9f9;
 }
 
 .defender-panel {
   border-color: #1c7ed6;
-  background: #edf6ff;
+  background: #f5faff;
 }
 
 label {
