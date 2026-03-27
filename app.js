@@ -68,7 +68,25 @@ function stageOptions(start, end, selected) {
 }
 
 function detailsLabel(expanded) {
-  return expanded ? "-----その他の詳細を格納▲-----" : "-----その他の詳細入力▼-----";
+  return expanded ? "その他の詳細を格納▲" : "その他の詳細入力▼";
+}
+
+function fillWithHyphen(baseLabel, width) {
+  const safeWidth = Math.max(0, width || 0);
+  const charWidth = 8;
+  const baseLength = [...baseLabel].length;
+  const totalChars = Math.max(baseLength + 2, Math.floor((safeWidth - 16) / charWidth));
+  const hyphenTotal = Math.max(0, totalChars - baseLength);
+  const left = Math.floor(hyphenTotal / 2);
+  const right = hyphenTotal - left;
+  return `${"-".repeat(left)}${baseLabel}${"-".repeat(right)}`;
+}
+
+function updateFillLabels() {
+  document.querySelectorAll("[data-fill-label]").forEach((el) => {
+    const baseLabel = el.dataset.fillLabel || "";
+    el.textContent = fillWithHyphen(baseLabel, el.clientWidth);
+  });
 }
 
 function syncCriticalCount(attacker) {
@@ -105,7 +123,7 @@ function renderAttackers() {
             aria-label="攻撃側${n}人目の名前"
           />
           <div class="panel-actions">
-            <button type="button" class="mini-toggle" data-action="toggle-attacker-collapsed" data-index="${index}">${attacker.collapsed ? "-----展開▼-----" : "-----格納▲-----"}</button>
+            <button type="button" class="mini-toggle fill-toggle" data-fill-label="${attacker.collapsed ? "展開▼" : "格納▲"}" data-action="toggle-attacker-collapsed" data-index="${index}">${attacker.collapsed ? "展開▼" : "格納▲"}</button>
             ${showDelete ? `<button type="button" class="mini-delete" data-action="delete-attacker" data-index="${index}">削除×</button>` : ""}
           </div>
         </div>
@@ -134,7 +152,7 @@ function renderAttackers() {
           </label>
         `}
 
-        <button type="button" class="details-toggle" data-action="toggle-attacker-details" data-index="${index}">${detailsLabel(attacker.detailsExpanded)}</button>
+        <button type="button" class="details-toggle" data-fill-label="${detailsLabel(attacker.detailsExpanded)}" data-action="toggle-attacker-details" data-index="${index}">${detailsLabel(attacker.detailsExpanded)}</button>
 
         ${attacker.detailsExpanded ? `
           ${isPhysical ? `
@@ -203,6 +221,8 @@ function renderAttackers() {
     ${html}
     ${state.attackers.length < MAX_ATTACKERS ? '<button type="button" id="addAttackerButton" class="add-attacker">攻撃キャラクターを追加＋</button>' : ""}
   `;
+
+  updateFillLabels();
 }
 
 function getUsedModes() {
@@ -230,7 +250,7 @@ function renderDefender() {
           aria-label="攻撃される側の名前"
         />
         <div class="panel-actions">
-          <button type="button" class="mini-toggle" data-action="toggle-defender-collapsed">${d.collapsed ? "-----展開▼-----" : "-----格納▲-----"}</button>
+          <button type="button" class="mini-toggle fill-toggle" data-fill-label="${d.collapsed ? "展開▼" : "格納▲"}" data-action="toggle-defender-collapsed">${d.collapsed ? "展開▼" : "格納▲"}</button>
         </div>
       </div>
 
@@ -244,7 +264,7 @@ function renderDefender() {
       ${hasAttribute ? `
         <div class="attribute-grid">
           ${usedAttributes.map((attr) => `
-            <label>${attr}耐性
+            <label>${attr}属性耐性
               <select data-defender-attr="${attr}" data-defender-kind="resistance">
                 ${stageOptions(-4, 9, d.attributes[attr].resistance)}
               </select>
@@ -253,7 +273,7 @@ function renderDefender() {
         </div>
       ` : ""}
 
-      <button type="button" class="details-toggle" data-action="toggle-defender-details">${detailsLabel(d.detailsExpanded)}</button>
+      <button type="button" class="details-toggle" data-fill-label="${detailsLabel(d.detailsExpanded)}" data-action="toggle-defender-details">${detailsLabel(d.detailsExpanded)}</button>
 
       ${d.detailsExpanded ? `
         ${hasPhysical ? `
@@ -289,6 +309,8 @@ function renderDefender() {
       `}
     </section>
   `;
+
+  updateFillLabels();
 }
 
 function renderAll() {
@@ -364,7 +386,7 @@ function recalculate() {
       });
 
     if (result.error) {
-      renderResult({ error: `打撃選択している場合は${result.error}` });
+      renderResult({ error: `打撃を選択している場合は${result.error}` });
       return;
     }
 
@@ -507,8 +529,7 @@ function main() {
   document.addEventListener("click", handleClick);
   document.addEventListener("input", handleInputOrChange);
   document.addEventListener("change", handleInputOrChange);
+  window.addEventListener("resize", updateFillLabels);
 }
 
 document.addEventListener("DOMContentLoaded", main);
-
-
