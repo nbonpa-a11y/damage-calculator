@@ -122,6 +122,10 @@ button {
   font-weight: 600;
 }
 
+.add-attacker {
+  border-style: solid;
+}
+
 .panel-head {
   display: flex;
   align-items: center;
@@ -196,10 +200,12 @@ button {
 
 .segmented-control {
   display: inline-flex;
-  border: 2px solid #111;
-  border-radius: 999px;
+  border: 1.5px solid #b8b8b8;
+  border-radius: 16px;
   overflow: hidden;
-  background: #4b5563;
+  background: #d1d1d1;
+  padding: 2px;
+  gap: 2px;
 }
 
 .segmented-control label {
@@ -213,9 +219,9 @@ button {
 .segmented-control label span {
   display: block;
   padding: 6px 12px;
-  border-right: 1px solid #111;
   cursor: pointer;
-  color: #ffffff;
+  color: #111;
+  border-radius: 0;
 }
 
 .segmented-control label:last-child span {
@@ -226,6 +232,9 @@ button {
   background: #ffffff;
   color: #111;
   font-weight: 700;
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  margin: 0 1px;
 }
 
 .vertical-control {
@@ -235,19 +244,19 @@ button {
 
 .vertical-control label span {
   border-right: none;
-  border-bottom: 1px solid #111;
+  border-bottom: none;
 }
 
 .vertical-control label:last-child span {
   border-bottom: none;
 }
 
-.attr-select.attr-fire { background: #ffd9d9; }
+.attr-select.attr-fire { background: #ffc7c7; }
 .attr-select.attr-water { background: #6ea8ff; }
 .attr-select.attr-electric { background: #fff7cc; }
 .attr-select.attr-earth { background: #ffe8cc; }
 .attr-select.attr-wind { background: #ddf7dd; }
-.attr-select.attr-ice { background: #f2fbff; }
+.attr-select.attr-ice { background: #dceeff; }
 .attr-select.attr-light { background: #ffffff; }
 .attr-select.attr-dark { background: #eddcff; }
 
