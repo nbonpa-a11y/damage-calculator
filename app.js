@@ -87,12 +87,12 @@ function attrColorClass(attr) {
 
 function attrOptionColor(attr) {
   const table = {
-    火: "#ffd9d9",
+    火: "#ffc7c7",
     水: "#6ea8ff",
     電気: "#fff7cc",
     土: "#ffe8cc",
     風: "#ddf7dd",
-    氷: "#f2fbff",
+    氷: "#dceeff",
     光: "#ffffff",
     闇: "#eddcff",
   };
@@ -183,7 +183,7 @@ function renderAttackers() {
 
         ${attacker.detailsExpanded ? `
           ${isPhysical ? `
-            <label>攻のバフ、デバフ状態
+            <label>攻撃力のバフ、デバフ状態
               <select data-index="${index}" data-field="attackStage">${stageOptions(-9, 9, attacker.attackStage)}</select>
             </label>
             <label>攻撃倍率+値（未入力なら等倍）
@@ -444,7 +444,7 @@ function recalculate() {
   if (d.targetHp.trim() !== "") {
     const hp = Number.parseInt(d.targetHp, 10);
     if (!Number.isInteger(hp) || hp <= 0) {
-      renderResult({ error: "HPは正の整で入力してください" });
+      renderResult({ error: "HPは正の整数で入力してください" });
       return;
     }
 
