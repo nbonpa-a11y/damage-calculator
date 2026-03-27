@@ -424,7 +424,7 @@ function recalculate() {
       });
 
     if (result.error) {
-      renderResult({ error: `打撃を選択している合は${result.error}` });
+      renderResult({ error: `打撃を選択している場合は${result.error}` });
       return;
     }
 
