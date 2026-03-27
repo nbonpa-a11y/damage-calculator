@@ -88,7 +88,7 @@ function attrColorClass(attr) {
 function attrOptionColor(attr) {
   const table = {
     火: "#ffc7c7",
-    水: "#40afff",
+    水: "#66bfff",
     電気: "#ffef9c",
     土: "#ffe8cc",
     風: "#ddf7dd",
