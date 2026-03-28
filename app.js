@@ -130,7 +130,6 @@ function renderAttackers() {
   const html = state.attackers.map((attacker, index) => {
     syncCriticalCount(attacker);
     const n = index + 1;
-    const showDelete = state.attackers.length > 1;
     const isPhysical = attacker.damageType === "打撃";
 
     return `
@@ -147,7 +146,7 @@ function renderAttackers() {
           />
           <div class="panel-actions">
             <button type="button" class="mini-toggle fill-toggle" data-fill-label="${attacker.collapsed ? "展開▼" : "格納▲"}" data-action="toggle-attacker-collapsed" data-index="${index}">${attacker.collapsed ? "展開▼" : "格納▲"}</button>
-            ${showDelete ? `<button type="button" class="mini-delete" data-action="delete-attacker" data-index="${index}">削除×</button>` : ""}
+            <button type="button" class="mini-delete" data-action="delete-attacker" data-index="${index}" aria-label="攻撃側${n}人目を削除またはリセット">×</button>
           </div>
         </div>
 
@@ -288,6 +287,7 @@ function renderDefender() {
         />
         <div class="panel-actions">
           <button type="button" class="mini-toggle fill-toggle" data-fill-label="${d.collapsed ? "展開▼" : "格納▲"}" data-action="toggle-defender-collapsed">${d.collapsed ? "展開▼" : "格納▲"}</button>
+          <button type="button" class="mini-delete" data-action="reset-defender" aria-label="攻撃される側をリセット">×</button>
         </div>
       </div>
 
@@ -301,7 +301,7 @@ function renderDefender() {
       ${hasAttribute ? `
         <div class="attribute-grid">
           ${usedAttributes.map((attr) => `
-            <label>${attr}属性耐性
+            <label>${attr}耐性
               <select class="attr-select ${attrColorClass(attr)}" data-defender-attr="${attr}" data-defender-kind="resistance">
                 ${stageOptions(-4, 9, d.attributes[attr].resistance)}
               </select>
@@ -336,7 +336,7 @@ function renderDefender() {
           <span>オート防御、守り</span>
           <div class="segmented-control">
             <label><input type="radio" name="autoGuard" value="無し" data-defender-field="autoGuard"${d.autoGuard === "無し" ? " checked" : ""}/><span>無し</span></label>
-            <label><input type="radio" name="autoGuard" value="有り" data-defender-field="autoGuard"${d.autoGuard === "有り" ? " checked" : ""}/><span>有り</span></label>
+            <label><input type="radio" name="autoGuard" value="有り" data-defender-field="autoGuard"${d.autoGuard === "有" ? " checked" : ""}/><span>有り</span></label>
           </div>
         </div>
 
@@ -480,8 +480,12 @@ function handleClick(event) {
   const deleteButton = event.target.closest('[data-action="delete-attacker"]');
   if (deleteButton) {
     const index = Number.parseInt(deleteButton.dataset.index, 10);
-    if (state.attackers.length > 1 && Number.isInteger(index)) {
-      state.attackers.splice(index, 1);
+    if (Number.isInteger(index)) {
+      if (state.attackers.length > 1) {
+        state.attackers.splice(index, 1);
+      } else {
+        state.attackers[0] = createDefaultAttacker();
+      }
       renderAll();
       recalculate();
     }
@@ -521,6 +525,14 @@ function handleClick(event) {
   const defenderCollapsedToggle = event.target.closest('[data-action="toggle-defender-collapsed"]');
   if (defenderCollapsedToggle) {
     state.defender.collapsed = !state.defender.collapsed;
+    renderDefender();
+    recalculate();
+    return;
+  }
+
+  const defenderReset = event.target.closest('[data-action="reset-defender"]');
+  if (defenderReset) {
+    state.defender = createDefaultDefender();
     renderDefender();
     recalculate();
   }
