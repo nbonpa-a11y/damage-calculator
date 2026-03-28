@@ -64,12 +64,12 @@ section {
 
 .attacker-panel {
   border-color: #d94848;
-  background: #fff9f9;
+  background: #fffbfb;
 }
 
 .defender-panel {
   border-color: #1c7ed6;
-  background: #f5faff;
+  background: #fbfbff;
 }
 
 label {
@@ -116,13 +116,14 @@ button {
 .add-attacker {
   width: 100%;
   margin: 12px 0 8px;
-  border: 2px dashed #111;
+  border: none;
   border-radius: 999px;
   background: transparent;
   font-weight: 600;
 }
 
 .add-attacker {
+  border: 2px solid #111;
   border-style: solid;
 }
 
@@ -164,12 +165,15 @@ button {
 .mini-delete {
   margin: 0;
   padding: 6px 10px;
-  border: 2px dashed #111;
+  border: 2px solid #111;
   border-radius: 999px;
   background: transparent;
-  border-style: dashed;
   color: #212529;
   font-weight: 700;
+}
+
+.mini-toggle {
+  border: none;
 }
 
 .fill-toggle {
@@ -232,6 +236,7 @@ button {
   cursor: pointer;
   color: #111;
   border-radius: 0;
+  border-right: 1px solid #8f8f8f;
 }
 
 .segmented-control label:last-child span {
@@ -254,7 +259,7 @@ button {
 
 .vertical-control label span {
   border-right: none;
-  border-bottom: none;
+  border-bottom: 1px solid #8f8f8f;
 }
 
 .vertical-control label:last-child span {
@@ -262,7 +267,7 @@ button {
 }
 
 .attr-select.attr-fire { background: #ffc7c7; }
-.attr-select.attr-water { background: #66bfff; }
+.attr-select.attr-water { background: #70bfff; }
 .attr-select.attr-electric { background: #ffef9c; }
 .attr-select.attr-earth { background: #ffe8cc; }
 .attr-select.attr-wind { background: #ddf7dd; }
