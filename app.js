@@ -570,7 +570,7 @@ function handleInputOrChange(event) {
     if (!Number.isInteger(index)) return;
     updateAttackerField(index, attackerField, event.target.value);
 
-    if (["damageType", "attributeType"].includes(attackerField)) {
+    if (["damageType", "attributeType", "jankenResult"].includes(attackerField)) {
       renderAll();
     } else if (["hitCount", "criticalCount", "attributeHitCount", "attributeLevel"].includes(attackerField)) {
       renderAttackers();
