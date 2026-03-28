@@ -56,14 +56,28 @@
     return autoGuard === "有り" && penetration !== "有り";
   }
 
-  function applyPostModifiers(damage, attackMultiplier, jankenResult, autoGuardActive) {
-    let d = floor(damage * (1 + attackMultiplier));
-
-    if (jankenResult === "勝ち") {
-      d = floor(d * 1.5);
-    } else if (jankenResult === "負け") {
-      d = floor(d * 0.7);
+  function parseWeakPercent(text, fieldName) {
+    if (text === "" || text === undefined || text === null) return { value: 0 };
+    const parsed = Number.parseInt(text, 10);
+    if (!Number.isInteger(parsed) || parsed < 0) {
+      return { error: `${fieldName}は0以上の整数で入力してください` };
     }
+    return { value: parsed };
+  }
+
+  function jankenMultiplier(jankenResult, weakDamagePlus, weakCover) {
+    if (jankenResult === "勝ち") {
+      return 1.5 + weakDamagePlus * 0.01 - weakCover * 0.01;
+    }
+    if (jankenResult === "負け") {
+      return 0.7;
+    }
+    return 1;
+  }
+
+  function applyPostModifiers(damage, attackMultiplier, jankenResult, autoGuardActive, weakDamagePlus, weakCover) {
+    let d = floor(damage * (1 + attackMultiplier));
+    d = floor(d * jankenMultiplier(jankenResult, weakDamagePlus, weakCover));
 
     if (autoGuardActive && d !== 1) {
       d = floor(d / 2);
@@ -72,12 +86,12 @@
     return d;
   }
 
-  function finalizeDistribution(defaultOutcomes, attackMultiplier, jankenResult, autoGuardActive) {
+  function finalizeDistribution(defaultOutcomes, attackMultiplier, jankenResult, autoGuardActive, weakDamagePlus, weakCover) {
     const dist = new Map();
 
     defaultOutcomes.forEach((o) => {
       const finalDamage = o.applyModifiers
-        ? applyPostModifiers(o.damage, attackMultiplier, jankenResult, autoGuardActive)
+        ? applyPostModifiers(o.damage, attackMultiplier, jankenResult, autoGuardActive, weakDamagePlus, weakCover)
         : o.damage;
       dist.set(finalDamage, (dist.get(finalDamage) || 0) + o.p);
     });
@@ -130,6 +144,10 @@
     if (!Number.isFinite(attackMultiplier)) {
       return { error: "攻撃倍率は数値で入力してください" };
     }
+    const weakDamagePlus = parseWeakPercent(params.weakDamagePlus, "弱点ダメージ＋");
+    if (weakDamagePlus.error) return { error: weakDamagePlus.error };
+    const weakCover = parseWeakPercent(params.weakCover, "弱点カバー");
+    if (weakCover.error) return { error: weakCover.error };
 
     const normalCount = hitCount - criticalCount;
     const a = applyStage(attackPower, attackStage);
@@ -140,14 +158,18 @@
       normalDefaultDistribution(a, b),
       attackMultiplier,
       params.jankenResult,
-      autoGuardActive
+      autoGuardActive,
+      weakDamagePlus.value,
+      weakCover.value
     );
 
     const critical = finalizeDistribution(
       criticalDefaultDistribution(a),
       attackMultiplier,
       params.jankenResult,
-      autoGuardActive
+      autoGuardActive,
+      weakDamagePlus.value,
+      weakCover.value
     );
 
     const normalSummary = summarizeDistribution(normal);
@@ -205,6 +227,10 @@
     if (!Number.isFinite(skillMultiplier)) {
       return { error: "特技倍率+値は数値で入力してください" };
     }
+    const weakDamagePlus = parseWeakPercent(params.weakDamagePlus, "弱点ダメージ＋");
+    if (weakDamagePlus.error) return { error: weakDamagePlus.error };
+    const weakCover = parseWeakPercent(params.weakCover, "弱点カバー");
+    if (weakCover.error) return { error: weakCover.error };
 
     const rateMul = attributeRateMultiplier(rateStage);
     const resistMul = attributeResistanceMultiplier(resistanceStage);
@@ -222,11 +248,7 @@
     for (let d = baseLow; d <= baseHigh; d += 1) {
       let x = floor(d * (1 + skillMultiplier));
       x = floor(x * attrMul);
-      if (params.jankenResult === "勝ち") {
-        x = floor(x * 1.5);
-      } else if (params.jankenResult === "負け") {
-        x = floor(x * 0.7);
-      }
+      x = floor(x * jankenMultiplier(params.jankenResult, weakDamagePlus.value, weakCover.value));
       if (autoGuardActive && x !== 1) {
         x = floor(x / 2);
       }
@@ -253,5 +275,3 @@
 
   global.DamageCalculator = api;
 })(typeof window !== "undefined" ? window : globalThis);
-
-
