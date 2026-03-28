@@ -88,7 +88,7 @@ function attrColorClass(attr) {
 function attrOptionColor(attr) {
   const table = {
     火: "#ffc7c7",
-    水: "#66bfff",
+    水: "#70bfff",
     電気: "#ffef9c",
     土: "#ffe8cc",
     風: "#ddf7dd",
@@ -336,7 +336,7 @@ function renderDefender() {
           <span>オート防御、守り</span>
           <div class="segmented-control">
             <label><input type="radio" name="autoGuard" value="無し" data-defender-field="autoGuard"${d.autoGuard === "無し" ? " checked" : ""}/><span>無し</span></label>
-            <label><input type="radio" name="autoGuard" value="有り" data-defender-field="autoGuard"${d.autoGuard === "有" ? " checked" : ""}/><span>有り</span></label>
+            <label><input type="radio" name="autoGuard" value="有り" data-defender-field="autoGuard"${d.autoGuard === "有り" ? " checked" : ""}/><span>有り</span></label>
           </div>
         </div>
 
