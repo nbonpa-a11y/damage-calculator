@@ -29,6 +29,7 @@ function createDefaultAttacker() {
     attributeRateStage: "none",
     attributeHitCount: "1",
     jankenResult: "無し、あいこ",
+    weakDamagePlus: "",
     penetration: "無し",
     collapsed: false,
     detailsExpanded: false,
@@ -45,6 +46,7 @@ function createDefaultDefender() {
     name: "",
     defensePower: "",
     defenseStage: "0",
+    weakCover: "",
     autoGuard: "無し",
     targetHp: "",
     collapsed: false,
@@ -209,6 +211,13 @@ function renderAttackers() {
             </div>
           </div>
 
+          <label>弱点ダメージ＋
+            <div class="percent-input-wrap">
+              <input type="number" min="0" step="1" value="${attacker.weakDamagePlus}" data-index="${index}" data-field="weakDamagePlus" />
+              <span class="percent-suffix">%</span>
+            </div>
+          </label>
+
           <div class="segmented-row">
             <span>貫通</span>
             <div class="segmented-control">
@@ -332,6 +341,13 @@ function renderDefender() {
           </div>
         ` : ""}
 
+        <label>弱点カバー
+          <div class="percent-input-wrap">
+            <input type="number" min="0" step="1" value="${d.weakCover}" data-defender-field="weakCover" />
+            <span class="percent-suffix">%</span>
+          </div>
+        </label>
+
         <div class="segmented-row">
           <span>オート防御、守り</span>
           <div class="segmented-control">
@@ -396,6 +412,8 @@ function recalculate() {
     const a = state.attackers[i];
     const common = {
       jankenResult: a.jankenResult,
+      weakDamagePlus: a.weakDamagePlus.trim(),
+      weakCover: d.weakCover.trim(),
       autoGuard: d.autoGuard,
       penetration: a.penetration,
       targetHp: "",
