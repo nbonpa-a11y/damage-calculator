@@ -211,12 +211,14 @@ function renderAttackers() {
             </div>
           </div>
 
-          <label>弱点ダメージ＋
-            <div class="percent-input-wrap">
-              <input type="number" min="0" step="1" value="${attacker.weakDamagePlus}" data-index="${index}" data-field="weakDamagePlus" />
-              <span class="percent-suffix">%</span>
-            </div>
-          </label>
+          ${attacker.jankenResult === "勝ち" ? `
+            <label>弱点ダメージ＋
+              <div class="percent-input-wrap">
+                <input type="number" min="0" step="1" value="${attacker.weakDamagePlus}" data-index="${index}" data-field="weakDamagePlus" />
+                <span class="percent-suffix">%</span>
+              </div>
+            </label>
+          ` : ""}
 
           <div class="segmented-row">
             <span>貫通</span>
@@ -280,6 +282,7 @@ function getUsedModes() {
 function renderDefender() {
   const { hasPhysical, usedAttributes } = getUsedModes();
   const hasAttribute = usedAttributes.length > 0;
+  const hasJankenWin = state.attackers.some((x) => x.jankenResult === "勝ち");
   const statusAttributes = usedAttributes.filter((attr) => attr !== "光");
   const d = state.defender;
 
@@ -341,12 +344,14 @@ function renderDefender() {
           </div>
         ` : ""}
 
-        <label>弱点カバー
-          <div class="percent-input-wrap">
-            <input type="number" min="0" step="1" value="${d.weakCover}" data-defender-field="weakCover" />
-            <span class="percent-suffix">%</span>
-          </div>
-        </label>
+        ${hasJankenWin ? `
+          <label>弱点カバー
+            <div class="percent-input-wrap">
+              <input type="number" min="0" step="1" value="${d.weakCover}" data-defender-field="weakCover" />
+              <span class="percent-suffix">%</span>
+            </div>
+          </label>
+        ` : ""}
 
         <div class="segmented-row">
           <span>オート防御、守り</span>
