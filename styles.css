@@ -103,6 +103,25 @@ button:focus-visible {
   box-shadow: 0 0 0 3px rgba(47, 158, 68, 0.22);
 }
 
+.percent-input-wrap {
+  position: relative;
+}
+
+.percent-input-wrap input {
+  width: 100%;
+  padding-right: 28px;
+  box-sizing: border-box;
+}
+
+.percent-suffix {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #495057;
+  pointer-events: none;
+}
+
 button {
   cursor: pointer;
   border: 2px solid #495057;
