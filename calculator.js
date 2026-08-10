@@ -18,27 +18,40 @@
     return arr;
   }
 
-  function normalDefaultDistribution(a, b) {
-    const c = floor((a - floor(b / 2)) / 2);
-
-    if (c >= 2) {
-      const span = floor(c / 16) + 1;
-      return uniformDistribution(c - span, c + span, true);
+  function physicalBaseDistribution(low, high) {
+    const count = high - low + 1;
+    const p = 1 / count;
+    const outcomes = [];
+    for (let damage = low; damage <= high; damage += 1) {
+      if (damage === 0) {
+        outcomes.push({ damage: 0, p: p / 2, applyModifiers: false });
+        outcomes.push({ damage: 1, p: p / 2, applyModifiers: false });
+      } else {
+        outcomes.push({ damage, p, applyModifiers: true });
+      }
     }
+    return outcomes;
+  }
 
-    if (c <= 0) {
+  function normalDefaultDistribution(a, b) {
+    const x = a - floor(b / 2);
+    const t = floor(a / 16);
+
+    if (x < 2) {
       return [
         { damage: 0, p: 0.5, applyModifiers: false },
         { damage: 1, p: 0.5, applyModifiers: false },
       ];
     }
 
-    return [
-      { damage: 0, p: 1 / 6, applyModifiers: false },
-      { damage: 1, p: 1 / 3, applyModifiers: true },
-      { damage: 1, p: 1 / 6, applyModifiers: false },
-      { damage: 2, p: 1 / 3, applyModifiers: true },
-    ];
+    const c = floor(x / 2);
+
+    if (c > t) {
+      const span = floor(c / 16) + 1;
+      return physicalBaseDistribution(c - span, c + span);
+    }
+
+    return physicalBaseDistribution(0, t);
   }
 
   function criticalDefaultDistribution(a) {
